@@ -1,6 +1,6 @@
 {
   "name": "aws-did-you-mean",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A simple module to interface with AWS CloudSearch's suggester",
   "main": "index.js",
   "scripts": {

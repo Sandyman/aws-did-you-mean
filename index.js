@@ -2,7 +2,7 @@
  * Created by Sander Huijsen on 25/11/16.
  */
 'use strict';
-var request = require('request');
+var http = require('http-request');
 
 class Suggest {
 
@@ -53,39 +53,26 @@ class Suggest {
     // In your code, simply iterate over the list, and show the suggestion.
 
     getAll(query, callback) {
-        var properties = {
-            q: query,
-            suggester: this._suggester
-        };
-
-        request(
-            {
-                url: this._searchUrl,
-                method: 'GET',
-                qs: properties,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            }, (error, response, body) => {
-                if (!error) {
-                    error = true;
-                    if (response.statusCode === 200) {
-                        var answer = JSON.parse(body);
-                        if (answer.hasOwnProperty('suggest')) {
-                            var sg = answer.suggest;
-                            if (sg.hasOwnProperty('suggestions')) {
-                                callback(sg.suggestions);
-                                error = false;
-                            }
+        var url = this._searchUrl + '?q=' + query + '&suggester=' + this._suggester;
+        http.get(url, (error, response) => {
+            if (!error) {
+                error = true;
+                if (response.code === 200) {
+                    var body = response.buffer.toString();
+                    var answer = JSON.parse(body);
+                    if (answer.hasOwnProperty('suggest')) {
+                        var sg = answer.suggest;
+                        if (sg.hasOwnProperty('suggestions')) {
+                            callback(sg.suggestions);
+                            error = false;
                         }
                     }
                 }
-                if (error) {
-                    callback([], 'No suggestions found. StatusCode = ' + response.statusCode);
-                }
             }
-        );
+            if (error) {
+                callback([], 'No suggestions found. StatusCode = ' + response.statusCode);
+            }
+        });
     }
 }
 

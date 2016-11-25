@@ -2,7 +2,7 @@
  * Created by Sander Huijsen on 25/11/16.
  */
 'use strict';
-var http = require('http-request');
+var fetchUrl = require('fetch').fetchUrl;
 
 class Suggest {
 
@@ -54,11 +54,10 @@ class Suggest {
 
     getAll(query, callback) {
         var url = this._searchUrl + '?q=' + query + '&suggester=' + this._suggester;
-        http.get(url, (error, response) => {
+        fetchUrl(url, (error, meta, body) => {
             if (!error) {
                 error = true;
-                if (response.code === 200) {
-                    var body = response.buffer.toString();
+                if (meta.status === 200) {
                     var answer = JSON.parse(body);
                     if (answer.hasOwnProperty('suggest')) {
                         var sg = answer.suggest;

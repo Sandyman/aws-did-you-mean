@@ -2,7 +2,9 @@
  * Created by Sander Huijsen on 25/11/16.
  */
 'use strict';
-var fetchUrl = require('fetch').fetchUrl;
+
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 class Suggest {
 
@@ -54,23 +56,13 @@ class Suggest {
 
     getAll(query, callback) {
         var url = this._searchUrl + '?q=' + query + '&suggester=' + this._suggester;
-        fetchUrl(url, (error, meta, body) => {
-            if (!error) {
-                error = true;
-                if (meta.status === 200) {
-                    var answer = JSON.parse(body);
-                    if (answer.hasOwnProperty('suggest')) {
-                        var sg = answer.suggest;
-                        if (sg.hasOwnProperty('suggestions')) {
-                            callback(sg.suggestions);
-                            error = false;
-                        }
-                    }
-                }
+        fetch(url).then((response) => {
+            if (response.status != 200) {
+                throw new Error('Bad response from server; statusCode = ' + response.statusCode);
             }
-            if (error) {
-                callback([], 'No suggestions found. StatusCode = ' + response.statusCode);
-            }
+            return response.json();
+        }).then((x) => {
+            callback(x.suggest.suggestions);
         });
     }
 }

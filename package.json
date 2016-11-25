@@ -1,0 +1,32 @@
+{
+  "name": "aws-did-you-mean",
+  "version": "0.0.1",
+  "description": "A simple module to interface with AWS CloudSearch's suggester",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sandyman/aws-did-you-mean.git"
+  },
+  "engines": {
+    "node": ">=4.6.2"
+  },
+  "keywords": [
+    "AWS",
+    "CloudSearch",
+    "Suggest",
+    "Search"
+  ],
+  "author": "Sander Huijsen <sander.huijsen@gmail.com> (http://www.sanderhuijsen.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sandyman/aws-did-you-mean/issues"
+  },
+  "homepage": "https://github.com/Sandyman/aws-did-you-mean#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}

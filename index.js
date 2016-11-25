@@ -56,7 +56,7 @@ class Suggest {
 
     getAll(query, callback) {
         var url = this._searchUrl + '?q=' + query + '&suggester=' + this._suggester;
-        fetch(url).then((response) => {
+        fetch(url, {'mode': 'no-cors'}).then((response) => {
             if (response.status != 200) {
                 throw new Error('Bad response from server; statusCode = ' + response.statusCode);
             }
